@@ -45,7 +45,7 @@ public class ProyectoIntegrador {
         scanner.close();
     }
 
-        // Menu Principal de registro
+    // Menu Principal de registro
 
     public static void mostrarMenu() {
         System.out.println("\n ** BIENVENID@S AL PROGRESO Y GESTIÓN PARA EL DESARROLLO LOCAL **");
@@ -135,108 +135,162 @@ public class ProyectoIntegrador {
         System.out.println(" Registro exitoso.");
     }
 
-        // iniciar sesion
+    // iniciar sesion
 
-   public static void iniciarSesion(Scanner scanner,
-        ArrayList<String> nombres, ArrayList<String> correos,
-        ArrayList<String> contrasenas, ArrayList<String> roles) {
+    public static void iniciarSesion(Scanner scanner,
+            ArrayList<String> nombres, ArrayList<String> correos,
+            ArrayList<String> contrasenas, ArrayList<String> roles) {
 
-    System.out.print("Correo electrónico: ");
-    String correoLogin = scanner.nextLine();
-    System.out.print("Contraseña: ");
-    String contrasenaLogin = scanner.nextLine();
+        System.out.print("Correo electrónico: ");
+        String correoLogin = scanner.nextLine();
+        System.out.print("Contraseña: ");
+        String contrasenaLogin = scanner.nextLine();
 
-    boolean encontrado = false;
+        boolean encontrado = false;
 
-    for (int i = 0; i < correos.size(); i++) {
-        if (correos.get(i).equalsIgnoreCase(correoLogin) &&
-                contrasenas.get(i).equals(contrasenaLogin)) {
+        for (int i = 0; i < correos.size(); i++) {
+            if (correos.get(i).equalsIgnoreCase(correoLogin) &&
+                    contrasenas.get(i).equals(contrasenaLogin)) {
 
-            System.out.println("Bienvenid@ " + roles.get(i) + " " + nombres.get(i) + "!");
-            String rol = roles.get(i).toLowerCase();
+                System.out.println("Bienvenid@ " + roles.get(i) + " " + nombres.get(i) + "!");
+                String rol = roles.get(i).toLowerCase();
 
-            if (rol.equals("estudiante")) {
-                menuEstudiante(scanner);
-            } else if (rol.equals("profesor")) {
-                menuProfesor(scanner);
+                if (rol.equals("estudiante")) {
+                    menuEstudiante(scanner);
+                } else if (rol.equals("profesor")) {
+                    menuProfesor(scanner);
+                }
+
+                encontrado = true;
+                break;
             }
+        }
 
-            encontrado = true;
-            break;
+        if (!encontrado) {
+            System.out.println(" Correo o contraseña incorrectos.");
         }
     }
 
-    if (!encontrado) {
-        System.out.println(" Correo o contraseña incorrectos.");
+    // Menu del estudiante
+
+    public static void menuEstudiante(Scanner scanner) {
+        String opcion;
+        do {
+            System.out.println("\n** Menú Estudiante **");
+            System.out.println("1. Solicitar subsidio de estudio");
+            System.out.println("2. Clases virtuales");
+            System.out.println("3. Biblioteca virtual");
+            System.out.println("4. Cerrar sesión");
+            System.out.print("Seleccione una opción: ");
+            opcion = scanner.nextLine();
+
+            switch (opcion) {
+
+                // ingreso del valor del curso y menú de nivel economico
+                case "1": {
+                    System.out.println("\nIngrese el valor del curso que desea en COP:  ");
+
+                    double precioOriginal = 0;
+
+                    // try-catch sirve para manejar errores, evitar que se rompa el ciclo y muestre
+                    // un mensaje.
+                    try {
+                        precioOriginal = Double.parseDouble(scanner.nextLine());
+                    } catch (NumberFormatException e) {
+                        System.out.println("Valor inválido. Ingresar número valido.");
+                        break;
+                    }
+
+                    System.out.println("\nSeleccione su nivel económico: ");
+                    System.out.println("1. vulnerable. ");
+                    System.out.println("2. pobreza moderada. ");
+                    System.out.println("3. Pobreza extrema. ");
+                    System.out.println("Ingrese una opción (1-3): ");
+                    String nivel = scanner.nextLine();
+
+                    double subsidio = 0.0;
+                    String descripcion = "";
+
+                    // switch anidado de calculo para subsidio
+                    switch (nivel) {
+                        case "1":
+                            subsidio = 0.50;
+                            descripcion = "Vulnerable";
+                            break;
+                        case "2":
+                            subsidio = 0.80;
+                            descripcion = "Pobreza moderada";
+                            break;
+                        case "3":
+                            subsidio = 1.00;
+                            descripcion = "Pobreza extrema";
+                            break;
+                        default:
+                            System.out.println("Opción no valida.");
+                            continue;
+                    }
+
+                    double montoSubsidio = precioOriginal * subsidio;
+                    double montoPagar = precioOriginal - montoSubsidio;
+
+                    System.out.println("\nDetalles de Subsidio Estudiantil:  ");
+                    System.out.println("Nivel económico: " + descripcion);
+                    System.out.println("Subsidio aplicado: " + (int) (subsidio * 100) + "%");
+                    System.out.println("Monto del curso: $" + String.format("%,.0f", precioOriginal));
+                    System.out.println("Valor del subsidio: $" + String.format("%,.0f", montoSubsidio));
+                    System.out.println("Monto que debes pagar: $" + String.format("%,.0f", montoPagar));
+                    System.out.println("Tu solicitud ha sido registrada.");
+                    break;
+                }
+
+                case "2":
+                    System.out.println("Accediendo a la plataforma de clases virtuales...");
+                    break;
+                case "3":
+                    System.out.println("Accediendo a la biblioteca virtual...");
+                    break;
+                case "4":
+                    System.out.println("Feliz Día ¡Hasta Luego!.");
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
+            }
+        } while (!opcion.equals("4"));
     }
-}
 
-// Menu del estudiante
+    // Menu del profesor
 
-public static void menuEstudiante(Scanner scanner) {
-    String opcion;
-    do {
-        System.out.println("\n** Menú Estudiante **");
-        System.out.println("1. Solicitar subsidio de estudio");
-        System.out.println("2. Clases virtuales");
-        System.out.println("3. Biblioteca virtual");
-        System.out.println("4. Cerrar sesión");
-        System.out.print("Seleccione una opción: ");
-        opcion = scanner.nextLine();
+    public static void menuProfesor(Scanner scanner) {
+        String opcion;
+        do {
+            System.out.println("\n** Menú Profesor **");
+            System.out.println("1. Clases virtuales");
+            System.out.println("2. Biblioteca virtual");
+            System.out.println("3. Cerrar sesión");
+            System.out.print("Seleccione una opción: ");
+            opcion = scanner.nextLine();
 
-        switch (opcion) {
-            case "1":
-                System.out.println("Solicitud de subsidio enviada. Será evaluada por el sistema.");
-                break;
-            case "2":
-                System.out.println("Accediendo a la plataforma de clases virtuales...");
-                break;
-            case "3":
-                System.out.println("Accediendo a la biblioteca virtual...");
-                break;
-            case "4":
-                System.out.println("Feliz Día ¡Hasta Luego!.");
-                break;
-            default:
-                System.out.println("Opción no válida.");
-        }
-    } while (!opcion.equals("4"));
-}
+            switch (opcion) {
+                case "1":
+                    System.out.println("Accediendo a la plataforma de clases virtuales...");
+                    break;
+                case "2":
+                    System.out.println("Accediendo a la biblioteca virtual...");
+                    break;
+                case "3":
+                    System.out.println("Feliz Día ¡Hasta Luego!.");
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
+            }
+        } while (!opcion.equals("3"));
+    }
 
-// Menu del estudiante
-
-public static void menuProfesor(Scanner scanner) {
-    String opcion;
-    do {
-        System.out.println("\n** Menú Profesor **");
-        System.out.println("1. Clases virtuales");
-        System.out.println("2. Biblioteca virtual");
-        System.out.println("3. Cerrar sesión");
-        System.out.print("Seleccione una opción: ");
-        opcion = scanner.nextLine();
-
-        switch (opcion) {
-            case "1":
-                System.out.println("Accediendo a la plataforma de clases virtuales...");
-                break;
-            case "2":
-                System.out.println("Accediendo a la biblioteca virtual...");
-                break;
-            case "3":
-                System.out.println("Feliz Día ¡Hasta Luego!.");
-                break;
-            default:
-                System.out.println("Opción no válida.");
-        }
-    } while (!opcion.equals("3"));
-}
-
-public static void mostrarContacto() {
-    System.out.println("Contáctenos");
-    System.out.println("Correo: soporte@example.com");
-    System.out.println("Teléfono: +57 300 000 0000");
-    System.out.println("Dirección: Calle Ficticia #123, Ciudad Imaginaria");
-}
-
+    public static void mostrarContacto() {
+        System.out.println("Contáctenos");
+        System.out.println("Correo: soporte@example.com");
+        System.out.println("Teléfono: +57 300 000 0000");
+        System.out.println("Dirección: Calle Ficticia #123, Ciudad Imaginaria");
+    }
 
 }
